@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TiketPesawat.id</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f8ff;
+            color: #000;
+        }
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            padding: 20px;
+            max-width: 500px;
+            background-color: white;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #003d80;
+        }
+        #hasil {
+            margin-top: 20px;
+            background-color: #e0f7fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        #qr-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+    <!-- QRCode.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>TiketPesawat.id</h1>
+    <nav>
+        <a href="#">Cari Penerbangan</a>
+        <a href="#">Hasil</a>
+        <a href="#">Kontak</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Cari Tiket Pesawat</h2>
+    <label>Kota Asal:</label>
+    <input type="text" id="asal" placeholder="Contoh: Jakarta">
+    
+    <label>Kota Tujuan:</label>
+    <input type="text" id="tujuan" placeholder="Contoh: Surabaya">
+    
+    <label>Tanggal Keberangkatan:</label>
+    <input type="date" id="tanggal">
+    
+    <label>Jumlah Penumpang:</label>
+    <input type="number" id="jumlah" min="1" value="1">
+    
+    <button onclick="cariTiket()">Cari Tiket</button>
+
+    <div id="hasil"></div>
+    <div id="qr-container">
+        <canvas id="qrcode"></canvas>
+    </div>
+</div>
+
+<script>
+    function getHarga(asal, tujuan) {
+        const rute = {
+            "jakarta-surabaya": 900000,
+            "jakarta-bali": 1200000,
+            "surabaya-jakarta": 900000,
+            "medan-jakarta": 1400000,
+            "jakarta-medan": 1400000,
+            "surabaya-bali": 1000000,
+            "jakarta-bandung": 600000
+        };
+
+        const key = `${asal.toLowerCase()}-${tujuan.toLowerCase()}`;
+        return rute[key] || 1000000; // harga default
+    }
+
+    function formatRupiah(angka) {
+        return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function cariTiket() {
+        const asal = document.getElementById("asal").value.trim();
+        const tujuan = document.getElementById("tujuan").value.trim();
+        const tanggal = document.getElementById("tanggal").value;
+        const jumlah = parseInt(document.getElementById("jumlah").value);
+
+        if (!asal || !tujuan || !tanggal || !jumlah) {
+            alert("Silakan isi semua kolom.");
+            return;
+        }
+
+        const hargaPerTiket = getHarga(asal, tujuan);
+        const totalHarga = hargaPerTiket * jumlah;
+
+        const hasil = `
+            <h3>Hasil Pencarian Tiket:</h3>
+            <p><strong>Dari:</strong> ${asal}</p>
+            <p><strong>Tujuan:</strong> ${tujuan}</p>
+            <p><strong>Tanggal:</strong> ${tanggal}</p>
+            <p><strong>Jumlah Penumpang:</strong> ${jumlah}</p>
+            <p><strong>Harga per Tiket:</strong> ${formatRupiah(hargaPerTiket)}</p>
+            <p><strong>Total Harga:</strong> ${formatRupiah(totalHarga)}</p>
+            <p><em>*Jika sudah terdaftar bisa bayar lewat via barcode tolong di scane dibawa ini ya kalo sudah tinggal kasih tunjuk ke petugas bandara😇.</em></p>
+        `;
+        document.getElementById("hasil").innerHTML = hasil;
+
+        // QR Code untuk pembayaran simulasi
+        const dataPembayaran = `pembayaran_berhasil.html`;
+        QRCode.toCanvas(document.getElementById('qrcode'), dataPembayaran, function (error) {
+            if (error) {
+                console.error(error);
+            } else {
+                console.log("QR Code berhasil dibuat.");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
