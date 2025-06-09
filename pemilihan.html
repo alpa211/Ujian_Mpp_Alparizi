@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pilih Pesawat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center text-blue-700 mb-6">Pilih Pesawat</h1>
+    
+    <form id="pesanForm" class="space-y-6">
+      <div>
+        <label for="pesawat" class="block mb-2 text-sm font-medium text-gray-700">Maskapai</label>
+        <select id="pesawat" name="pesawat" required class="w-full p-3 rounded-lg border border-gray-300">
+          <option value="">-- Pilih Pesawat --</option>
+          <option value="Garuda Indonesia">Garuda Indonesia</option>
+          <option value="Lion Air">Lion Air</option>
+          <option value="AirAsia">AirAsia</option>
+          <option value="Citilink">Citilink</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">
+        Pilih Pesawat Ini
+      </button>
+    </form>
+
+    <!-- Tombol tambahan -->
+    <button id="lanjutBtn" class="mt-4 w-full bg-gray-600 text-white font-semibold py-3 rounded-lg hover:bg-gray-700 transition">
+      Lanjutkan ke Halaman Berikutnya
+    </button>
+  </div>
+
+  <script>
+    // Saat user klik tombol submit
+    document.getElementById("pesanForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const pesawat = document.getElementById("pesawat").value;
+      if (pesawat) {
+        alert("Anda memilih pesawat: " + pesawat);
+      } else {
+        alert("Silakan pilih pesawat terlebih dahulu.");
+      }
+    });
+
+    // Saat user klik tombol lanjut
+    document.getElementById("lanjutBtn").addEventListener("click", function () {
+      // Ganti kehalaman membeli tickets
+      window.location.href = "peswat terbang.html";
+    });
+  </script>
+</body>
+</html>
